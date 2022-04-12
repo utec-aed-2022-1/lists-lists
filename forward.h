@@ -81,22 +81,25 @@ class ForwardList : public List<T> {
     }
 
     T insert(T data, int pos){
-        Node<T>* nuevo = new Node<T>(data);
+        Node<T>* nuevo = new Node<T>;
+        nuevo ->data=data;
         Node<T>* temp = head;
         int i = 0;
-        while(i++ < pos - 1) {temp = temp->next;}
+        while(i++ < pos -1) {temp = temp->next;}
         nuevo->next = temp->next;
         temp->next = nuevo;
     }
 
     bool remove(int pos){
-        if (head== nullptr){ return 0;}
+        Node<T>*temp = head;
+        if (head== nullptr){ return false;}
+        else if(temp->next == nullptr || pos==0){pop_front(head); return true;}
         else {
-            Node<T> *temp = head;
             int i = 0;
-            while (i++ < pos - 1) { temp = temp->next; }
-            delete temp;
-        }
+            while (i++ < pos - 1) { temp = temp->next; }            
+            temp->next=temp->next->next;
+             }
+          return true;
     }
 
     T& operator[](int pos){
@@ -139,28 +142,62 @@ class ForwardList : public List<T> {
     void sort(){
 
         Node<T>* temp1 = head;
-        Node<T>* temp2 = temp1->next;
-        Node<T>* temp3 = temp2;
+        Node<T>* temp2 = head->next;
+
         while (temp1->next != nullptr)
         {
-          if (temp1->data > temp2->data & temp2!= nullptr)
-          {
+            if (temp1->data > temp2->data)
+            {
 
-              temp2->data= temp1->data;
-              temp1->data= temp3-> data;
-              temp1=head;
-          }
+                int aux = temp1->data;
+                temp1->data= temp2-> data;
+                temp2->data= aux;
+                temp1 = head;
+                temp2 = head->next;
+
+            }
             temp1 = temp1->next;
+            temp2 = temp2->next;
+
+            if(head->data > head->next->data){
+                temp1 = head;
+                temp2 = head->next;
+            }
         }
     }
 
-        bool is_sorted(){
-            throw ("sin definir");
+    bool is_sorted(){
+        Node<T>*  temp1 = head;
+        Node<T>*  temp2 = head->next;
+        while (temp1->next != nullptr){
+
+            if (temp1->data > temp2->data)
+            {
+                return false;
+            }
+            temp1 = temp1->next;
+            temp2 = temp2->next;
+        }
+        return true;
+    }
+
+   void reverse(){
+        Node<T>* temp1 = nullptr;
+        Node<T>* temp2=head;
+        Node<T>* temp3=head->next;
+
+        while (temp2 != nullptr){
+
+            temp2->next=temp1;
+            temp1= temp2;
+            temp2 = temp3;
+            temp3= temp3->next;
+
+
         }
 
-        void reverse(){
-            throw ("sin definir");
-        }
+        head=temp1;
+    }
 
         std::string name(){
             return "ForwardList";

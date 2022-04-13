@@ -6,23 +6,28 @@
 // TODO: Implement all methods
 template <typename T>
 class ForwardList : public List<T> {
-    private:
-        Node<T>* head;
-        int nodes;
+private:
+    Node<T>* head;
+    int nodes;
 
-    public:
-        ForwardList() : List<T>() {}
+public:
+    ForwardList() : List<T>() {
 
-        ~ForwardList(){ 
-         	// TODO            
-        }
+        head= new Node<T>;
+        head->next= nullptr;
 
-     T front(){
+    }
+
+    ~ForwardList(){
+        delete head;
+    }
+
+    T front(){
         if(head==nullptr){
             return 0;
         }
         else{
-           return head->data;
+            return head->data;
         }
     }
 
@@ -59,28 +64,34 @@ class ForwardList : public List<T> {
     }
 
     T pop_front(){
-        Node<T> *temp = head;
+        Node<T>* temp = head;
         head = head->next;
+        T i=temp->next->data;
         delete temp;
+        return i;
     }
 
     T pop_back(){
         if(head->next == nullptr)
         {
+            T  i= head->data;
             delete head;
             head = nullptr;
+            return i;
         }
         else {
 
             Node<T>* temp = head;
             while (temp->next->next != nullptr)
             {  temp = temp->next;}
+            int i=temp->data;
             delete temp->next;
             temp->next = nullptr;
+            return i;
         }
     }
 
-    T insert(T data, int pos){
+    void insert(T data, int pos){
         Node<T>* nuevo = new Node<T>;
         nuevo ->data=data;
         Node<T>* temp = head;
@@ -90,22 +101,24 @@ class ForwardList : public List<T> {
         temp->next = nuevo;
     }
 
-    bool remove(int pos){
-        Node<T>*temp = head;
-        if (head== nullptr){ return false;}
-        else if(temp->next == nullptr || pos==0){pop_front(head); return true;}
+    void remove(int pos){
+        Node<T> *temp = head;
+        if (head== nullptr){ return;}
+        else if(temp->next == nullptr || pos==0){T f=pop_front(); return;}
         else {
             int i = 0;
-            while (i++ < pos - 1) { temp = temp->next; }            
+            while (i++ < pos - 1) { temp = temp->next; }
+
+            Node<T> * temp2=temp->next;
             temp->next=temp->next->next;
-             }
-          return true;
+            delete temp2;
+        }
     }
 
     T& operator[](int pos){
 
         Node<T>* temp = head;
-        int i = 0;
+        T  i = 0;
         while(i++ < pos - 1) {temp = temp->next;}
         return temp->data;
 
@@ -113,8 +126,8 @@ class ForwardList : public List<T> {
     }
 
     bool is_empty(){
-        if (head== nullptr){ return true;}
-        else { return false;}
+        if (head != nullptr){ return false;}
+        else { return true;}
     }
 
     int size(){
@@ -167,8 +180,8 @@ class ForwardList : public List<T> {
     }
 
     bool is_sorted(){
-        Node<T>*  temp1 = head;
-        Node<T>*  temp2 = head->next;
+        Node<T>* temp1 = head;
+        Node<T>* temp2 = head->next;
         while (temp1->next != nullptr){
 
             if (temp1->data > temp2->data)
@@ -181,28 +194,30 @@ class ForwardList : public List<T> {
         return true;
     }
 
-   void reverse(){
+    void reverse(){
         Node<T>* temp1 = nullptr;
         Node<T>* temp2=head;
-        Node<T>* temp3=head->next;
+        Node<T>*  temp3;
 
         while (temp2 != nullptr){
 
+            temp3=temp2->next;
             temp2->next=temp1;
             temp1= temp2;
             temp2 = temp3;
-            temp3= temp3->next;
 
 
         }
 
         head=temp1;
+
+        head=temp1;
     }
 
-        std::string name(){
-            return "ForwardList";
-        }
-        
+    std::string name(){
+        return "ForwardList";
+    }
+
 };
 
 #endif

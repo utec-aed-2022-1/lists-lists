@@ -7,17 +7,20 @@ struct Node {
     Node<T>* next;
     Node<T>* prev;
 
-    Node(){ 
-        // TODO
+    Node(){
+
+        next= nullptr;
+        prev= nullptr;
     }
 
     Node(T value){
-        // TODO
+        data= value;
     }
 
     void killSelf(){
-        // TODO      
-    }    
+        delete next;
+        delete prev;
+    }
 };
 
 #endif
